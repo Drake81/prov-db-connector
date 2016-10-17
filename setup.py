@@ -20,6 +20,7 @@ setup(
     package_dir={
         'provdbconnector': 'provdbconnector'
     },
+    zip_safe = False,
     include_package_data=True,
     install_requires=[
         "prov==1.4.0",
