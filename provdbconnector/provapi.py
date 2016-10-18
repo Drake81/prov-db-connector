@@ -138,7 +138,7 @@ class ProvApi(object):
 
         for bundle in prov_document.bundles:
 
-            bundle_record = ProvEntity(bundle, identifier=bundle.identifier)
+            bundle_record = ProvEntity(bundle, identifier=bundle.identifier, attributes={PROV_TYPE: PROV_BUNDLE})
             (metadata, attributes) = self._get_metadata_and_attributes_for_record(bundle_record)
             bundle_id = self._adapter.save_record(attributes=attributes, metadata=metadata)
 
@@ -224,6 +224,14 @@ class ProvApi(object):
         if type(type_map) is str:
             io = StringIO(type_map)
             type_map = json.load(io)
+
+        elif type(type_map) is list:
+            type_map = dict()
+            for type_str in type_map:
+                if type(type_str) is not str:
+                    raise InvalidArgumentTypeException("The type_map must be a string got: {}".format(type_str))
+                io = StringIO(type_map)
+                type_map.update(json.load(io))
 
         elif type(type_map) is not dict:
             raise InvalidArgumentTypeException("The type_map must be a dict or json string got: {}".format(type_map))
